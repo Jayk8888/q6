@@ -98,6 +98,11 @@ module async_counter_tb;
         .q   (q)
     );
 
+    // Monitor logs on any change of q[3:0]
+    initial begin
+        $monitor("%0t: q changed to %0d (%b)", $time, q, q);
+    end
+
     initial begin
         // Initialize drives
         clk = 1'b0;
@@ -110,11 +115,10 @@ module async_counter_tb;
 
         rst = 1'b0;
 
-        // Run 200 clock toggles and report
+        // Run 200 clock toggles
         for (i = 0; i < 200; i = i + 1) begin
             #5  clk = ~clk; // posedge
             #5  clk = ~clk; // negedge (t_ff active edge)
-            $display("cycle %0d: q=%0d (%b)", i, q, q);
         end
         $finish;
     end
